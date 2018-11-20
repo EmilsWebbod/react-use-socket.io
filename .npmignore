@@ -1,4 +1,6 @@
+.gitattributes
 .gitignore
+README.md
 travis.yml
 tslint.json
 yarn.lock
