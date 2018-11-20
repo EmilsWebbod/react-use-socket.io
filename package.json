@@ -1,6 +1,6 @@
 {
   "name": "npm-typescript",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "NPM Typescript starter",
   "main": "dist/index.js",
   "scripts": {
