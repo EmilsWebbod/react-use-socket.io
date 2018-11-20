@@ -1,7 +1,7 @@
 {
-  "name": "npm-typescript",
-  "version": "1.0.2",
-  "description": "NPM Typescript starter",
+  "name": "@ludens/react-resource",
+  "version": "1.0.1",
+  "description": "React Resource and Fetch stuff",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -19,7 +19,10 @@
   },
   "keywords": [
     "typescript",
-    "npm"
+    "npm",
+    "fetch",
+    "crud",
+    "api"
   ],
   "author": "Emils Webbod",
   "license": "MIT",
@@ -29,12 +32,9 @@
   "homepage": "https://github.com/EmilsWebbod/npm-typescript#readme",
   "devDependencies": {
     "@types/chai": "^4.1.7",
-    "@types/istanbul": "^0.4.30",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.3",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.2",
-    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
     "source-map-support": "^0.5.9",
     "ts-node": "^7.0.1",
@@ -42,17 +42,7 @@
     "typescript": "^3.1.6",
     "typings": "^2.1.1"
   },
-  "nyc": {
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "exclude": [
-      "**/*.d.ts"
-    ],
-    "reporter": [
-      "html"
-    ],
-    "all": true
+  "dependencies": {
+    "npm-typescript": "^1.0.3"
   }
 }
