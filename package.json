@@ -1,6 +1,6 @@
 {
-  "name": "@ludens/react-resource",
-  "version": "1.0.1",
+  "name": "@ludens-reklame/react-reach",
+  "version": "1.0.0",
   "description": "React Resource and Fetch stuff",
   "main": "dist/index.js",
   "scripts": {
@@ -8,6 +8,8 @@
     "build:watch": "tsc --watch",
     "lint": "tslint --project \"./tsconfig.json\"",
     "test": "mocha --watch --watch-extensions ts -r ts-node/register test/**/*.spec.ts",
+    "test:active": "yarn test --watch -g active:",
+    "storybook": "start-storybook -p 9009 -s public",
     "postversion": "git push && git push --tags",
     "prepublish": "npm run build",
     "preversion": "npm run build"
@@ -23,8 +25,7 @@
     "crud",
     "api"
   ],
-  "author": "Emils Webbod",
-  "license": "MIT",
+  "author": "Ludens reklamebyrå",
   "bugs": {
     "url": "https://github.com/EmilsWebbod/npm-typescript/issues"
   },
@@ -32,16 +33,42 @@
   "files": [
     "lib"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@storybook/react": "^4.0.8",
     "@types/chai": "^4.1.7",
+    "@types/lodash.isequal": "^4.5.3",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.3",
+    "@types/qs": "^6.5.1",
+    "@types/react": "^16.7.7",
+    "@types/storybook__react": "^4.0.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.4",
     "chai": "^4.2.0",
+    "husky": "^1.2.0",
     "mocha": "^5.2.0",
+    "prettier": "^1.15.2",
+    "pretty-quick": "^1.8.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
     "source-map-support": "^0.5.9",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "typescript": "^3.1.6",
     "typings": "^2.1.1"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "lodash.isequal": "^4.5.0",
+    "qs": "^6.5.2"
+  },
+  "peerDependencies": {
+    "react": "^16.6.3"
   }
 }
