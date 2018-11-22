@@ -5,6 +5,7 @@ node_modules/
 coverage/
 lib/
 
+.cache
 .idea
 .nyc_output
 
