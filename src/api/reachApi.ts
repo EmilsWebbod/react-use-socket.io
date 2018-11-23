@@ -121,8 +121,7 @@ function getUrl(path: string, opts: ReachOpts) {
 async function handle400(response: Response): Promise<ReachError> {
   let message: string =
     response.status in ERROR.STATUS
-      ? // @ts-ignore
-        ERROR.STATUS[response.status]
+      ? ERROR.STATUS[response.status]
       : '40x feil';
   return reachCreateError(response.status, message, response);
 }

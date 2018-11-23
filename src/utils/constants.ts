@@ -1,4 +1,8 @@
-export const ERROR = {
+interface IERROR {
+  STATUS: { [key: number]: string };
+}
+
+export const ERROR: IERROR = {
   STATUS: {
     400: 'Ikke godkjent. Mangler data eller er eksisterer allerede',
     401: 'Ikke autorisert',

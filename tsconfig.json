@@ -7,10 +7,6 @@
     "strict": true,
     "jsx": "react"
   },
-  "exclude": [
-    "test"
-  ],
-  "include": [
-    "src"
-  ]
+  "exclude": ["test", "stories"],
+  "include": ["src"]
 }

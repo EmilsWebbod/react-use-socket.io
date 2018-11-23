@@ -2,7 +2,7 @@
   "name": "@ludens-reklame/react-reach",
   "version": "1.0.0",
   "description": "React Resource and Fetch stuff",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
@@ -16,10 +16,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EmilsWebbod/npm-typescript.git"
+    "url": "git+https://github.com/ludens-reklamebyra/react-reach.git"
   },
   "keywords": [
     "typescript",
+    "ts",
+    "react",
+    "reach",
     "npm",
     "fetch",
     "crud",
@@ -27,9 +30,9 @@
   ],
   "author": "Ludens reklamebyrå",
   "bugs": {
-    "url": "https://github.com/EmilsWebbod/npm-typescript/issues"
+    "url": "https://github.com/ludens-reklamebyra/react-reach/issues"
   },
-  "homepage": "https://github.com/EmilsWebbod/npm-typescript#readme",
+  "homepage": "https://github.com/ludens-reklamebyra/react-reach#readme",
   "files": [
     "lib"
   ],
@@ -69,6 +72,6 @@
     "qs": "^6.5.2"
   },
   "peerDependencies": {
-    "react": "^16.6.3"
+    "react": ">=^16.6.3"
   }
 }
