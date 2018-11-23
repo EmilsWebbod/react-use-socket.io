@@ -73,6 +73,6 @@
     "qs": "^6.5.2"
   },
   "peerDependencies": {
-    "react": ">=^16.6.3"
+    "react": ">=16.6.3"
   }
 }
