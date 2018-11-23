@@ -1,6 +1,6 @@
 {
   "name": "@ludens-reklame/react-reach",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Resource and Fetch stuff",
   "main": "lib/index.js",
   "scripts": {
