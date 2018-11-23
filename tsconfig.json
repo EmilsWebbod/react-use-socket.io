@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es6",
     "module": "commonjs",
     "declaration": true,
@@ -7,6 +8,6 @@
     "strict": true,
     "jsx": "react"
   },
-  "exclude": ["test", "stories"],
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["test", "stories"]
 }
