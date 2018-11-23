@@ -63,7 +63,7 @@ function getBody(opts: ReachOpts): FormData | string | undefined {
 
   opts.body = opts.body ? opts.body : {};
 
-  if (opts.auth) {
+  if (opts.auth && opts.tokenInBody) {
     try {
       addTokenToBody(opts);
     } catch (e) {
@@ -98,7 +98,7 @@ function getUrl(path: string, opts: ReachOpts) {
   const values = reachService.values;
   let params = '';
 
-  if (opts.auth) {
+  if (opts.auth && !opts.tokenInBody) {
     try {
       addTokenToBody(opts);
     } catch (e) {
@@ -106,8 +106,13 @@ function getUrl(path: string, opts: ReachOpts) {
     }
   }
 
+  const queries = {
+    ...opts.body,
+    ...opts.query
+  };
+
   if (opts.method === 'GET' && opts.body) {
-    params = `/?${qs.stringify(opts.body)}`;
+    params = `/?${qs.stringify(queries)}`;
   }
 
   return `${values.url}/${path}${params}`;
@@ -151,7 +156,7 @@ function addTokenToBody(opts: ReachOpts) {
   const token = reachService.getAuth('token');
 
   if (!token || token === '') {
-    throw reachCreateError(404, 'tokenNotProvided');
+    throw reachCreateError(401, 'tokenNotProvided');
   }
 
   if (!opts.body) {

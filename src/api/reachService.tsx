@@ -24,6 +24,7 @@ export interface ReachProviderValues {
 
 export interface IAuthorization {
   endPoint: string;
+  refreshingToken: boolean;
   type?: AuthorizationTypes;
   token?: string;
   refreshToken?: string;
@@ -31,6 +32,7 @@ export interface IAuthorization {
 
 const defaultAuth: IAuthorization = {
   endPoint: '',
+  refreshingToken: false,
   type: 'Basic',
   token: '',
   refreshToken: ''

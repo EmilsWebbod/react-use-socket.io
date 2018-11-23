@@ -1,6 +1,5 @@
 import { reachService } from '../reachService';
 import { reachApi, reachCreateError } from '../reachApi';
-import { goToRoot } from '../../utils';
 
 interface AccessToken {
   token: string;
@@ -11,24 +10,31 @@ interface AccessToken {
 async function refreshAccessToken(): Promise<void> {
   try {
     const refreshToken = reachService.getAuth('refreshToken');
+    const refreshingToken = reachService.getAuth('refreshingToken');
     let endPoint = reachService.getAuth('endPoint');
-    endPoint = endPoint !== '' ? endPoint : reachService.get('url');
+    endPoint = endPoint && endPoint !== '' ? endPoint : reachService.get('url');
 
-    if (!refreshToken || refreshToken === '') {
-      goToRoot();
-
+    if (refreshingToken) {
       throw reachCreateError(
-        500,
-        'En feil har oppstått. Vennligst logg inn igjen.'
+        401,
+        'Innlogging har utgått. Vennligst logg inn igjen.'
       );
     }
 
+    if (!refreshToken || refreshToken === '') {
+      throw reachCreateError(
+        401,
+        'Kan ikke hente ny tilgangs token. Ingen refresh token gitt'
+      );
+    }
+
+    reachService.setAuth('refreshingToken', true);
     const response: AccessToken = await reachApi<AccessToken>(endPoint, {
       method: 'POST',
       auth: false,
       body: { refreshToken }
     });
-
+    reachService.setAuth('refreshingToken', false);
     reachService.setAuth('token', response.token);
   } catch (e) {
     throw e;

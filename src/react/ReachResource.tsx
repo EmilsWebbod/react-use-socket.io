@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { isEqual } from 'lodash';
-import ReachResourceState from './reachResource/ReachResourceState';
+import ReachResourceState, {
+  IResourceState
+} from './reachResource/ReachResourceState';
 import { reachApi } from '../api';
 import {
   ReachBusyState,
@@ -33,6 +35,7 @@ export interface IReachProps<T, U = null> {
   ErrorState?: ReachErrorState;
   StatusWrapper?: ReachStatusWrapper;
   noEmptyState?: boolean;
+  noBusyState?: boolean;
   params?: object;
   secondaryEndpoint?: string;
   secondaryParams?: object;
@@ -184,18 +187,23 @@ export class ReachResource<T, U = null> extends React.Component<
     }
   };
 
-  private getState() {
-    const { noEmptyState } = this.props;
+  private getState(): IResourceState {
+    const { noEmptyState, noBusyState } = this.props;
     const { busy, data, errorStatus } = this.state;
-    return errorStatus
-      ? errorStatus
-      : busy
-      ? 'busy'
-      : data
-      ? 'data'
-      : noEmptyState
-      ? 'data'
-      : 'empty';
+
+    if (errorStatus) {
+      return errorStatus;
+    }
+
+    if (!noBusyState && busy) {
+      return 'busy';
+    }
+
+    if (noEmptyState || data) {
+      return 'data';
+    }
+
+    return 'empty';
   }
 
   public putField = (fields: string[], updateData: any) => {

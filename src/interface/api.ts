@@ -8,6 +8,10 @@ export interface IHeaders {
   [key: string]: any;
 }
 
+export interface IQuery {
+  [key: string]: string;
+}
+
 export interface ReachError {
   code: number;
   message: string;
@@ -21,5 +25,7 @@ export interface ReachOpts {
   multipart?: boolean;
   filesKeys?: string[];
   body?: IBody;
+  query?: IQuery;
   headers?: IHeaders;
+  tokenInBody?: boolean;
 }
