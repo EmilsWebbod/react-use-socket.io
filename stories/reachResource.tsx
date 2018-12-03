@@ -2,11 +2,11 @@ import * as React from 'react';
 import { storiesOf } from '@storybook/react';
 import { ReachResource } from '../src/react';
 
+type Test = Array<{ id: string; title: string }>;
+type Test2 = Array<{ id: string; body: string }>;
+
 storiesOf('ReactResource', module).add('default', () => (
-  <ReachResource<
-    Array<{ id: string; title: string }>,
-    Array<{ id: string; body: string }>
-  >
+  <ReachResource<Test, Test2>
     endpoint="posts"
     params={{ id: 1 }}
     noEmptyState
@@ -37,9 +37,7 @@ storiesOf('ReactResource', module).add('default', () => (
 
 storiesOf('ReactResource', module).add('EmptyState', () => {
   return (
-    <ReachResource<
-      Array<{ id: string; title: string }>
-    > endpoint="todos?id=11111">
+    <ReachResource<Test> endpoint="todos?id=11111">
       {({ data }) => (
         <>
           {(data || []).map(x => (
@@ -55,7 +53,7 @@ storiesOf('ReactResource', module).add('EmptyState', () => {
 
 storiesOf('ReactResource', module).add('ErrorState', () => {
   return (
-    <ReachResource<Array<{ id: string; title: string }>> endpoint="todoss">
+    <ReachResource<Test> endpoint="todoss">
       {({ data }) => (
         <>
           {(data || []).map(x => (

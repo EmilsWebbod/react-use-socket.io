@@ -12,7 +12,7 @@ export async function reachApi<T = object>(
   try {
     const opts: ReachOpts = {
       ...reachService.get('opts'),
-      ...optsOverride
+      ...(optsOverride || {})
     };
 
     const init: RequestInit = {
@@ -29,7 +29,7 @@ export async function reachApi<T = object>(
 
     if (response.status < 400) {
       data = opts.noJson ? response : await response.json();
-    } else if (response.status === 401) {
+    } else if (response.status === 403) {
       if (reachService.getAuth('type') === 'Bearer') {
         await refreshAccessToken();
         return await reachApi<T>(path, optsOverride);
@@ -117,7 +117,7 @@ function getUrl(path: string, opts: ReachOpts) {
   const values = reachService.values;
   let params = '';
 
-  if (opts.auth && !opts.tokenInBody) {
+  if (opts.auth && opts.tokenInBody) {
     try {
       addTokenToBody(opts);
     } catch (e) {
@@ -134,7 +134,7 @@ function getUrl(path: string, opts: ReachOpts) {
     params = `/?${qs.stringify(queries)}`;
   }
 
-  return `${values.url}/${path}${params}`;
+  return `${opts.usePathAsUrl ? '' : values.url + '/'}${path}${params}`;
 }
 
 async function handle400(response: Response): Promise<ReachError> {

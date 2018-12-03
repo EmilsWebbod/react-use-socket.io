@@ -34,6 +34,7 @@ export interface ReachProviderValues {
   EmptyState: ReachEmptyState;
   BusyState: ReachBusyState;
   ErrorState: ReachErrorState;
+  storageKey: string;
 }
 
 type IAuthorization = ReachBasicAuth | ReachBearerAuth;
@@ -50,6 +51,7 @@ export const defaultReachProviderValues: ReachProviderValues = {
     auth: false,
     credentials: 'include'
   },
+  storageKey: 'authorization',
   headers: defaultHeaders(),
   authorization: loadFromStorage('authorization') || defaultAuth,
   StatusWrapper: ({ children }) => <>{children}</>,
@@ -80,7 +82,7 @@ class ReachService {
       ...this._values.authorization,
       ...authorization
     } as IAuthorization;
-    saveToStorage('authorization', this._values.authorization);
+    saveToStorage(this.get('storageKey'), this._values.authorization);
   }
 
   public getAuthorization() {
@@ -104,6 +106,7 @@ class ReachService {
     value: IAuthorization[K]
   ) {
     this._values.authorization[key] = value;
+    saveToStorage(this.get('storageKey'), this._values.authorization);
   }
 
   public clearAuth() {
@@ -118,6 +121,9 @@ class ReachService {
     if (values.authorization) {
       this.setAuthorization(values.authorization);
       delete values.authorization;
+      if (!values.opts) {
+        this._values.opts.auth = true;
+      }
     }
     this._values = {
       ...this._values,

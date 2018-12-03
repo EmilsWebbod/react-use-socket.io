@@ -35,7 +35,8 @@ async function refreshAccessToken(): Promise<void> {
     const response: AccessToken = await reachApi<AccessToken>(endPoint, {
       method: 'POST',
       auth: false,
-      body: { refreshToken }
+      body: { refreshToken },
+      usePathAsUrl: true
     });
     reachService.refreshingToken = false;
     reachService.setAuth('token', response.token);

@@ -13,9 +13,6 @@ const ErrorState = ({ error }) => (
 addDecorator(story => (
   <ReachProvider
     url="https://jsonplaceholder.typicode.com"
-    authorization={{
-      token: 'coolToken'
-    }}
     EmptyState={EmptyState}
     BusyState={BusyState}
     ErrorState={ErrorState}
