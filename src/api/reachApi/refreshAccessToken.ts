@@ -1,4 +1,4 @@
-import { reachService } from '../reachService';
+import { ReachBearerAuth, reachService } from '../reachService';
 import { reachApi, reachCreateError } from '../reachApi';
 
 interface AccessToken {
@@ -9,9 +9,12 @@ interface AccessToken {
 
 async function refreshAccessToken(): Promise<void> {
   try {
-    const refreshToken = reachService.getAuth('refreshToken');
-    const refreshingToken = reachService.getAuth('refreshingToken');
-    let endPoint = reachService.getAuth('endPoint');
+    const refreshToken = reachService.getAuth<
+      ReachBearerAuth,
+      keyof ReachBearerAuth
+    >('refreshToken');
+    const refreshingToken = reachService.refreshingToken;
+    let endPoint = reachService.getAuth<ReachBearerAuth>('endpoint');
     endPoint = endPoint && endPoint !== '' ? endPoint : reachService.get('url');
 
     if (refreshingToken) {
@@ -28,13 +31,13 @@ async function refreshAccessToken(): Promise<void> {
       );
     }
 
-    reachService.setAuth('refreshingToken', true);
+    reachService.refreshingToken = true;
     const response: AccessToken = await reachApi<AccessToken>(endPoint, {
       method: 'POST',
       auth: false,
       body: { refreshToken }
     });
-    reachService.setAuth('refreshingToken', false);
+    reachService.refreshingToken = false;
     reachService.setAuth('token', response.token);
   } catch (e) {
     throw e;

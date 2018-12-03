@@ -13,12 +13,12 @@ export type AuthorizationBasic = 'Basic';
 export type AuthorizationBearer = 'Bearer';
 export type AuthorizationTypes = AuthorizationBasic | AuthorizationBearer;
 
-export type IBasicAuth = {
+export type ReachBasicAuth = {
   type: AuthorizationBasic;
   token: string;
 };
 
-export type IBearerAuth = {
+export type ReachBearerAuth = {
   type: AuthorizationBearer;
   endpoint: string;
   token: string;
@@ -29,14 +29,14 @@ export interface ReachProviderValues {
   url: string;
   headers: Headers;
   opts: ReachOpts;
-  authorization: IBasicAuth | IBearerAuth;
+  authorization: ReachBasicAuth | ReachBearerAuth;
   StatusWrapper: ReachStatusWrapper;
   EmptyState: ReachEmptyState;
   BusyState: ReachBusyState;
   ErrorState: ReachErrorState;
 }
 
-type IAuthorization = IBasicAuth | IBearerAuth;
+type IAuthorization = ReachBasicAuth | ReachBearerAuth;
 
 const defaultAuth: IAuthorization = {
   type: 'Basic',
@@ -93,8 +93,10 @@ class ReachService {
     return this._values[key];
   }
 
-  public getAuth<K extends keyof IAuthorization>(key: K): IAuthorization[K] {
-    return this._values.authorization[key];
+  public getAuth<T extends IAuthorization, K extends keyof T = keyof T>(
+    key: K
+  ): T[K] {
+    return (this._values.authorization as T)[key];
   }
 
   public setAuth<K extends keyof IAuthorization>(
