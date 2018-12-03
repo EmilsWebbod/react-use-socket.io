@@ -9,40 +9,46 @@ import { ReachOpts } from '../interface/api';
 import { loadFromStorage, saveToStorage } from '../utils/localStorage';
 import React = require('react');
 
-export type AuthorizationTypes = 'Basic' | 'Bearer';
+export type AuthorizationBasic = 'Basic';
+export type AuthorizationBearer = 'Bearer';
+export type AuthorizationTypes = AuthorizationBasic | AuthorizationBearer;
+
+export type IBasicAuth = {
+  type: AuthorizationBasic;
+  token: string;
+};
+
+export type IBearerAuth = {
+  type: AuthorizationBearer;
+  endpoint: string;
+  token: string;
+  refreshToken: string;
+};
 
 export interface ReachProviderValues {
   url: string;
   headers: Headers;
   opts: ReachOpts;
-  authorization: IAuthorization;
+  authorization: IBasicAuth | IBearerAuth;
   StatusWrapper: ReachStatusWrapper;
   EmptyState: ReachEmptyState;
   BusyState: ReachBusyState;
   ErrorState: ReachErrorState;
 }
 
-export interface IAuthorization {
-  endPoint: string;
-  refreshingToken: boolean;
-  type?: AuthorizationTypes;
-  token?: string;
-  refreshToken?: string;
-}
+type IAuthorization = IBasicAuth | IBearerAuth;
 
 const defaultAuth: IAuthorization = {
-  endPoint: '',
-  refreshingToken: false,
   type: 'Basic',
-  token: '',
-  refreshToken: ''
+  token: ''
 };
 
 export const defaultReachProviderValues: ReachProviderValues = {
   url: '',
   opts: {
     method: 'GET',
-    auth: false
+    auth: false,
+    credentials: 'include'
   },
   headers: defaultHeaders(),
   authorization: loadFromStorage('authorization') || defaultAuth,
@@ -60,6 +66,7 @@ let instance: ReachService;
 
 class ReachService {
   private _values: ReachProviderValues = defaultReachProviderValues;
+  public refreshingToken: boolean = false;
 
   constructor() {
     if (!instance) {
@@ -72,7 +79,7 @@ class ReachService {
     this._values.authorization = {
       ...this._values.authorization,
       ...authorization
-    };
+    } as IAuthorization;
     saveToStorage('authorization', this._values.authorization);
   }
 
@@ -128,6 +135,7 @@ class ReachService {
     }
 
     this._values.headers = _headers;
+    return this._values.headers;
   }
 }
 

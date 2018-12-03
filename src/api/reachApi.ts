@@ -53,6 +53,25 @@ export async function reachApi<T = object>(
 }
 
 function getHeaders(opts: ReachOpts) {
+  if (opts.auth) {
+    const type = reachService.getAuth('type');
+    const token = reachService.getAuth('token');
+    if (!type) {
+      throw reachCreateError(401, 'Missing Authorization "type"');
+    }
+    if (!token) {
+      throw reachCreateError(401, 'Missing Authorization "token"');
+    }
+
+    if (!opts.headers) {
+      opts.headers = {
+        Authorization: `${type} ${token}`
+      };
+    } else {
+      opts.headers.Authorization = `${type} ${token}`;
+    }
+  }
+
   return reachService.combineHeaders(opts.headers);
 }
 

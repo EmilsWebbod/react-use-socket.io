@@ -28,4 +28,5 @@ export interface ReachOpts {
   query?: IQuery;
   headers?: IHeaders;
   tokenInBody?: boolean;
+  credentials?: RequestCredentials;
 }
