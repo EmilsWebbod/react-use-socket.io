@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { addDecorator, configure } from '@storybook/react';
-import { ReachProvider } from '../src/react';
 
 const EmptyState = () => <>Fant ikke resurs</>;
 const BusyState = () => <>Laster...</>;
@@ -10,16 +9,9 @@ const ErrorState = ({ error }) => (
   </>
 );
 
-addDecorator(story => (
-  <ReachProvider
-    url="https://jsonplaceholder.typicode.com"
-    EmptyState={EmptyState}
-    BusyState={BusyState}
-    ErrorState={ErrorState}
-  >
-    {story()}
-  </ReachProvider>
-));
+addDecorator(story => {
+  return story();
+});
 
 const req = require.context('../stories', true, /\.tsx$/);
 

@@ -24,4 +24,60 @@ function clearStorage() {
   }
 }
 
-export { saveToStorage, loadFromStorage, clearStorage };
+interface ObjectWithKeys<T> {
+  [key: string]: ObjectWithKeys<T> | T;
+}
+
+function getKeyFromObject<T = string>(
+  obj: ObjectWithKeys<T>,
+  keyPath: string[],
+  keyIndex = 0
+): T | null {
+  const key = keyPath[keyIndex];
+
+  if (obj[key]) {
+    if (keyIndex === keyPath.length - 1) {
+      return obj[key] as T;
+    } else if (typeof obj[key] === 'object') {
+      return getKeyFromObject(
+        obj[key] as ObjectWithKeys<T>,
+        keyPath,
+        keyIndex + 1
+      );
+    }
+  }
+
+  return null;
+}
+
+function setKeyToObject(
+  obj: ObjectWithKeys<any>,
+  keyPath: string[],
+  value: any,
+  keyIndex = 0
+): ObjectWithKeys<any> | null {
+  const key = keyPath[keyIndex];
+
+  if (!obj || !obj[key]) {
+    if (keyIndex === keyPath.length - 1) {
+      obj[key] = value;
+      return obj;
+    } else if (typeof obj[key] === 'object') {
+      obj[key] = setKeyToObject(obj[key], keyPath, value, keyIndex + 1);
+    }
+  } else {
+    if (!obj) {
+      obj = {};
+    }
+    obj[key] = setKeyToObject(obj[key], keyPath, value, keyIndex + 1);
+  }
+  return obj;
+}
+
+export {
+  saveToStorage,
+  loadFromStorage,
+  clearStorage,
+  getKeyFromObject,
+  setKeyToObject
+};

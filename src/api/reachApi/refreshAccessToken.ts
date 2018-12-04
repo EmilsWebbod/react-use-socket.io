@@ -14,7 +14,10 @@ async function refreshAccessToken(): Promise<void> {
       keyof ReachBearerAuth
     >('refreshToken');
     const refreshingToken = reachService.refreshingToken;
-    let endPoint = reachService.getAuth<ReachBearerAuth>('endpoint');
+    const multipart = reachService.getAuth<ReachBearerAuth>(
+      'multipart'
+    ) as boolean;
+    let endPoint = reachService.getAuth<ReachBearerAuth>('endpoint') as string;
     endPoint = endPoint && endPoint !== '' ? endPoint : reachService.get('url');
 
     if (refreshingToken) {
@@ -36,10 +39,11 @@ async function refreshAccessToken(): Promise<void> {
       method: 'POST',
       auth: false,
       body: { refreshToken },
-      usePathAsUrl: true
+      usePathAsUrl: true,
+      multipart: multipart
     });
     reachService.refreshingToken = false;
-    reachService.setAuth('token', response.token);
+    reachService.token = response.token;
   } catch (e) {
     throw e;
   }
