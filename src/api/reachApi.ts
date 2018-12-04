@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 import * as qs from 'qs';
 import { reachService } from './reachService';
 import refreshAccessToken from './reachApi/refreshAccessToken';
-import { ReachError, ReachOpts } from '../interface/api';
+import { IBody, ReachError, ReachOpts } from '../interface/api';
 import { ERROR } from '../utils/constants';
 
 export async function reachApi<T = object>(
@@ -87,11 +87,26 @@ function getBody(opts: ReachOpts): FormData | string | undefined {
     }
   }
 
-  return Object.keys(opts.body).length > 0
-    ? opts.multipart
-      ? createForm(opts)
-      : JSON.stringify(opts.body)
-    : undefined;
+  return Object.keys(opts.body).length > 0 ? parseBody(opts) : undefined;
+}
+
+function parseBody(opts: ReachOpts) {
+  const contentType = opts.headers
+    ? opts.headers['Content-Type']
+    : 'application/json';
+  const body = opts.body as IBody;
+  switch (contentType) {
+    case 'multipart/form-data':
+      return createForm(body);
+    case 'application/x-www-form-urlencoded':
+      return Object.keys(body)
+        .map(
+          key => `${encodeURIComponent(key)}=${encodeURIComponent(body[key])}`
+        )
+        .join('&');
+    default:
+      return JSON.stringify(body);
+  }
 }
 
 function createForm(opts: ReachOpts): FormData {

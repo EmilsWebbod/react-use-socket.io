@@ -40,11 +40,18 @@ async function refreshAccessToken(): Promise<void> {
       auth: false,
       body: { refreshToken },
       usePathAsUrl: true,
-      multipart: multipart
+      ...(multipart
+        ? {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }
+        : {})
     });
     reachService.refreshingToken = false;
     reachService.token = response.token;
   } catch (e) {
+    reachService.refreshingToken = false;
     throw e;
   }
 }

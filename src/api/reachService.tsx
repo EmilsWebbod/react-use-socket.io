@@ -221,6 +221,7 @@ class ReachService {
     }
 
     const updated = setKeyToObject(storage, storageValue.split('.'), value);
+
     if (updated) {
       saveToStorage(this.get('localStorage').storageKey, updated);
     }
