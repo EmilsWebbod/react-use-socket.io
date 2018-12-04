@@ -1,14 +1,19 @@
 export type IMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
-export interface IBody {
+export type ReachContentTypes =
+  | 'application/json'
+  | 'multipart/form-data'
+  | 'application/x-www-form-urlencoded';
+
+export interface ReachBody {
   [key: string]: any;
 }
 
-export interface IHeaders {
+export interface ReachHeaders {
   [key: string]: any;
 }
 
-export interface IQuery {
+export interface ReachQuery {
   [key: string]: string;
 }
 
@@ -19,14 +24,14 @@ export interface ReachError {
 }
 
 export interface ReachOpts {
+  type?: ReachContentTypes;
   noJson?: boolean;
   method?: IMethods;
   auth?: boolean;
-  multipart?: boolean;
-  filesKeys?: string[];
-  body?: IBody;
-  query?: IQuery;
-  headers?: IHeaders;
+  fileKeys?: string[];
+  body?: ReachBody;
+  query?: ReachQuery;
+  headers?: ReachHeaders;
   usePathAsUrl?: boolean;
   tokenInBody?: boolean;
   credentials?: RequestCredentials;

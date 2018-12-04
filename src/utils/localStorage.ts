@@ -62,15 +62,15 @@ function setKeyToObject(
     obj = {};
   }
 
+  if (keyIndex === keyPath.length - 1) {
+    obj[key] = value;
+    return obj;
+  }
+
   if (!obj[key]) {
     obj[key] = setKeyToObject(obj[key], keyPath, value, keyIndex + 1);
-  } else {
-    if (keyIndex === keyPath.length - 1) {
-      obj[key] = value;
-      return obj;
-    } else if (typeof obj[key] === 'object') {
-      obj[key] = setKeyToObject(obj[key], keyPath, value, keyIndex + 1);
-    }
+  } else if (typeof obj[key] === 'object') {
+    obj[key] = setKeyToObject(obj[key], keyPath, value, keyIndex + 1);
   }
 
   return obj;

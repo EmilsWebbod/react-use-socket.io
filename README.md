@@ -11,10 +11,10 @@ export interface ReachProviderValues {
     url: string;
     headers: HttpHeaders;
     opts: {
+        type: 'application/json' | 'multipart/form-data' | 'application/x-www-form-urlencoded';
         noJson: boolean;
         method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
         auth: boolean;
-        multipart: boolean;
         filesKeys: string[];
         body: IBody; // [key: string]: any
         query: IQuery; // [key: string]: string

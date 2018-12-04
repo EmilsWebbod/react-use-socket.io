@@ -9,7 +9,11 @@ import {
   ReachEmptyState,
   ReachErrorState,
   ReachStatusWrapper
-} from '../interface/react';
+} from '../interface';
+import {
+  getKeyPathForObject,
+  updateDataFromKeyPath
+} from './reachResource/reachUpdateField';
 
 export interface IReachOpts<T, U = null> {
   background?: boolean;
@@ -209,14 +213,9 @@ export class ReachResource<T, U = null> extends React.Component<
   public putField = (fields: string[], updateData: any) => {
     const { data } = this.state;
     if (data && updateData._id) {
-      const works = this.traverseFields(data, fields, 0, updateData._id);
-      const fieldIndexes = works.split(',');
-      const updated = this.updateDataFromTraverse(
-        fieldIndexes,
-        0,
-        data,
-        updateData
-      );
+      const fieldPath = getKeyPathForObject(data, fields, 0, updateData._id);
+      const fieldIndexes = fieldPath.split(',');
+      const updated = updateDataFromKeyPath(fieldIndexes, 0, data, updateData);
       this.setState({
         data: updated
       });
@@ -225,54 +224,5 @@ export class ReachResource<T, U = null> extends React.Component<
         'Failed to putField: Resource Data is null or updateData has no _id value'
       );
     }
-  };
-
-  private traverseFields = (
-    data: any,
-    fields: string[],
-    stepIndex: number,
-    id: string
-  ): string => {
-    let indexes = '';
-    if (Array.isArray(data)) {
-      for (let i = 0; i < data.length; i++) {
-        const d = data[i];
-        const arrIndex = this.traverseFields(d, fields, stepIndex, id);
-        if (arrIndex !== '') {
-          indexes += `${i},${arrIndex}`;
-        }
-      }
-    } else if (fields[stepIndex] && data[fields[stepIndex]]) {
-      const objIndex = this.traverseFields(
-        data[fields[stepIndex]],
-        fields,
-        stepIndex + 1,
-        id
-      );
-      if (objIndex) {
-        indexes += `${fields[stepIndex]},${objIndex}`;
-      }
-    } else if (data._id && data._id === id) {
-      return `true`;
-    }
-    return indexes;
-  };
-
-  private updateDataFromTraverse = (
-    path: string[],
-    pathIndex: number,
-    data: any,
-    set: any
-  ) => {
-    if (path[pathIndex] === 'true') {
-      return set;
-    }
-    data[path[pathIndex]] = this.updateDataFromTraverse(
-      path,
-      pathIndex + 1,
-      data[path[pathIndex]],
-      set
-    );
-    return data;
   };
 }

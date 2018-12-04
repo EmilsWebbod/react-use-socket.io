@@ -9,18 +9,13 @@ interface AccessToken {
 
 async function refreshAccessToken(): Promise<void> {
   try {
-    const refreshToken = reachService.getAuth<
-      ReachBearerAuth,
-      keyof ReachBearerAuth
-    >('refreshToken');
-    const refreshingToken = reachService.refreshingToken;
-    const multipart = reachService.getAuth<ReachBearerAuth>(
-      'multipart'
-    ) as boolean;
-    let endPoint = reachService.getAuth<ReachBearerAuth>('endpoint') as string;
-    endPoint = endPoint && endPoint !== '' ? endPoint : reachService.get('url');
+    const auth = reachService.get('authorization') as ReachBearerAuth;
+    const refreshToken = auth.refreshToken;
+    const type = auth.contentType;
+    const endpoint =
+      auth.endpoint !== '' ? auth.endpoint : reachService.get('url');
 
-    if (refreshingToken) {
+    if (reachService.refreshingToken) {
       throw reachCreateError(
         401,
         'Innlogging har utgått. Vennligst logg inn igjen.'
@@ -35,19 +30,15 @@ async function refreshAccessToken(): Promise<void> {
     }
 
     reachService.refreshingToken = true;
-    const response: AccessToken = await reachApi<AccessToken>(endPoint, {
+
+    const response: AccessToken = await reachApi<AccessToken>(endpoint, {
       method: 'POST',
       auth: false,
       body: { refreshToken },
       usePathAsUrl: true,
-      ...(multipart
-        ? {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        : {})
+      ...(type ? { type } : {})
     });
+
     reachService.refreshingToken = false;
     reachService.token = response.token;
   } catch (e) {
