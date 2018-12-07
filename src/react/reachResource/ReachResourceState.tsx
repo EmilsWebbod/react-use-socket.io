@@ -49,7 +49,7 @@ export default class ReachResourceState extends React.Component<IProps> {
     const Component = BusyState ? BusyState : reachService.get('BusyState');
     return (
       <Wrapper busy={true}>
-        {Component ? <Component /> : this.props.children}
+        {Component ? <Component /> : this.props.children || {}}
       </Wrapper>
     );
   }
