@@ -29,9 +29,15 @@ export function getUrl(path: string, opts: ReachOpts) {
 }
 
 export function getHeaders(opts: ReachOpts) {
-  if (opts.auth && (!opts.headers || !opts.headers.Authorization)) {
+  const token = reachService.getAuth('token');
+  if (
+    opts.auth &&
+    (!opts.headers ||
+      !opts.headers.Authorization ||
+      opts.headers.Authorization !== token)
+  ) {
     const type = reachService.getAuth('type');
-    const token = reachService.getAuth('token');
+
     if (!type) {
       throw reachCreateError(401, 'Missing Authorization "type"');
     }

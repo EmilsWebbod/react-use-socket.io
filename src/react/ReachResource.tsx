@@ -82,7 +82,9 @@ export class ReachResource<T, U = null> extends React.Component<
 
   componentDidUpdate(prevProps: IReachProps<T, U>) {
     const { endpoint, dontFetch, afterFetch, params } = this.props;
+    const { busy } = this.state;
     if (
+      !busy &&
       !dontFetch &&
       (prevProps.endpoint !== endpoint || !isEqual(prevProps.params, params))
     ) {
@@ -133,6 +135,7 @@ export class ReachResource<T, U = null> extends React.Component<
     opts?: IReachOpts<T, U>
   ): Promise<{ data: T | null; secondaryData: U | null }> => {
     const { params } = this.props;
+    const { busy } = this.state;
 
     const background = (opts && opts.background) || false;
     const cb = (opts && opts.cb) || undefined;

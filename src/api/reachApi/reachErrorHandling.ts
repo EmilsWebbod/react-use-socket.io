@@ -12,6 +12,12 @@ export async function handleError<T>(
 ) {
   if (response.status === 403) {
     if (reachService.getAuth('type') === 'Bearer') {
+      if (
+        opts.headers &&
+        (opts.headers.Authorization || opts.headers.Authorization === '')
+      ) {
+        delete opts.headers.Authorization;
+      }
       await refreshAccessToken();
       return await reachApi<T>(path, opts);
     } else {
