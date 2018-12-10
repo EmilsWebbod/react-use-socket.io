@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { reachApi } from '../api/reachApi';
-import { ReachOpts, ReachError } from '../interface/api';
-
-type AppStateTypes = 'initial' | 'busy' | 'success' | 'error' | 'empty';
+import { ReachError, ReachOpts } from '../interface/api';
 
 interface IOpts<T> extends ReachOpts {
   endpoint: string;
@@ -10,29 +8,31 @@ interface IOpts<T> extends ReachOpts {
   onError?: (error: ReachError) => void;
 }
 
-export default function useReach<T>(opts: IOpts<T>) {
-  const [appState, setAppState] = useState<AppStateTypes>('initial');
+export default function useReach<T>(
+  opts: IOpts<T>
+): [boolean, T | null, ReachError | null, () => Promise<void>] {
+  const [busy, setBusy] = useState<boolean>(false);
   const [response, setResponse] = useState<T | null>(null);
   const [error, setError] = useState<ReachError | null>(null);
 
   async function fetchData() {
-    if (appState === 'busy') {
+    if (busy) {
       return;
     }
 
     try {
-      setAppState('busy');
+      setBusy(true);
 
       const res = await reachApi<T>(opts.endpoint, opts);
 
-      setAppState('success');
+      setBusy(false);
       setResponse(res);
 
       if (typeof opts.onSuccess === 'function') {
         opts.onSuccess(res);
       }
     } catch (error) {
-      setAppState('error');
+      setBusy(false);
       setError(error);
 
       if (typeof opts.onError === 'function') {
@@ -48,5 +48,5 @@ export default function useReach<T>(opts: IOpts<T>) {
     [opts.query, opts.body]
   );
 
-  return [appState, response, error];
+  return [busy, response, error, fetchData];
 }
