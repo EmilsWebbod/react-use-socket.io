@@ -8,7 +8,7 @@ interface IOpts<T> extends ReachOpts {
   onError?: (error: ReachError) => void;
 }
 
-export default function useReach<T>(
+export function useReach<T>(
   opts: IOpts<T>
 ): [boolean, T | null, ReachError | null, () => Promise<void>] {
   const [busy, setBusy] = useState<boolean>(false);

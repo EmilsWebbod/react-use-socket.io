@@ -1,5 +1,5 @@
 import { storiesOf } from '@storybook/react';
-import useReach from '../src/react/useReach';
+import { useReach } from '../src/react/useReach';
 import { ReachProvider } from '../src/react';
 import * as React from 'react';
 
