@@ -1,5 +1,4 @@
-import { useEffect, useRef } from 'react';
-import { isEqual } from 'lodash';
+import { useEffect } from 'react';
 import { reachApi } from '../api/reachApi';
 import { ReachError, ReachOpts } from '../interface/api';
 import useSafeState from '../utils/useSafeState';
@@ -16,7 +15,6 @@ export function useReach<T>(
   const [busy, setBusy] = useSafeState<boolean>(false);
   const [response, setResponse] = useSafeState<T | null>(null);
   const [error, setError] = useSafeState<ReachError | null>(null);
-  const previousOpts = useRef<void | any>(undefined);
 
   async function fetchData() {
     if (busy) {
@@ -44,14 +42,12 @@ export function useReach<T>(
     }
   }
 
-  useEffect(() => {
-    if (isEqual(previousOpts.current, opts) || busy) {
-      return;
-    }
-
-    previousOpts.current = opts;
-    fetchData();
-  });
+  useEffect(
+    () => {
+      fetchData();
+    },
+    [opts.query, opts.body]
+  );
 
   return [busy, response, error, fetchData];
 }

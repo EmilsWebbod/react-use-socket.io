@@ -10,17 +10,12 @@ storiesOf('User Reach', module).add('useReach', () => (
 ));
 
 function RenderProps() {
-  const [state, setState] = React.useState(0);
   const [busy, data, error, refresh] = useReach<
     Array<{ id: string; title: string }>
   >({
     endpoint: 'todos'
   });
 
-  React.useEffect(() => {
-    setState(state + 1);
-  }, []);
-  console.log(state);
   return (
     <div>
       <button onClick={refresh}>Refresh</button>
