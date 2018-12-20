@@ -7,7 +7,7 @@ export default function useSafeState<T>(
   const mountedRef = useRef(false);
 
   function setSafeState(nextState: T) {
-    return mountedRef && setState(nextState);
+    return mountedRef.current && setState(nextState);
   }
 
   useEffect(() => {
