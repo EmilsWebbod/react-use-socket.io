@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { isEqual } from 'lodash';
 import { reachApi } from '../api/reachApi';
 import { ReachError, ReachOpts } from '../interface/api';
+import useSafeState from '../utils/useSafeState';
 
 interface IOpts<T> extends ReachOpts {
   endpoint: string;
@@ -11,9 +13,9 @@ interface IOpts<T> extends ReachOpts {
 export function useReach<T>(
   opts: IOpts<T>
 ): [boolean, T | null, ReachError | null, () => Promise<void>] {
-  const [busy, setBusy] = useState<boolean>(false);
-  const [response, setResponse] = useState<T | null>(null);
-  const [error, setError] = useState<ReachError | null>(null);
+  const [busy, setBusy] = useSafeState<boolean>(false);
+  const [response, setResponse] = useSafeState<T | null>(null);
+  const [error, setError] = useSafeState<ReachError | null>(null);
 
   async function fetchData() {
     if (busy) {
@@ -41,12 +43,19 @@ export function useReach<T>(
     }
   }
 
-  useEffect(
-    () => {
-      fetchData();
-    },
-    [opts.query, opts.body]
-  );
+  useEffect(() => {
+    if (isEqual(previousOpts.current, [opts])) {
+      return;
+    }
+
+    fetchData();
+  });
+
+  const previousOpts = useRef<void | IOpts<T>[]>(undefined);
+
+  useEffect(() => {
+    previousOpts.current = [opts];
+  });
 
   return [busy, response, error, fetchData];
 }
