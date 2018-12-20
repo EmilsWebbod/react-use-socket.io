@@ -1,20 +1,22 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef, SetStateAction } from 'react';
 
 export default function useSafeState<T>(
   defaultState: T
-): [T, (nextState: T) => void] {
-  const [state, setState] = useState(defaultState);
+): [T, (state: SetStateAction<T>) => void] {
+  const [state, setState] = useState<T>(defaultState);
   const mountedRef = useRef(false);
 
-  function setSafeState(nextState: T) {
-    return mountedRef.current && setState(nextState);
+  function setSafeState(arg: SetStateAction<T>) {
+    return mountedRef.current && setState(arg);
   }
 
   useEffect(() => {
     mountedRef.current = true;
 
-    return () => (mountedRef.current = false);
-  });
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   return [state, setSafeState];
 }
