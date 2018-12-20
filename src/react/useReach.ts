@@ -16,6 +16,7 @@ export function useReach<T>(
   const [busy, setBusy] = useSafeState<boolean>(false);
   const [response, setResponse] = useSafeState<T | null>(null);
   const [error, setError] = useSafeState<ReachError | null>(null);
+  const previousOpts = useRef<void | any>(undefined);
 
   async function fetchData() {
     if (busy) {
@@ -44,17 +45,12 @@ export function useReach<T>(
   }
 
   useEffect(() => {
-    if (isEqual(previousOpts.current, [opts])) {
+    if (isEqual(previousOpts.current, opts.body) || busy) {
       return;
     }
 
+    previousOpts.current = opts.body;
     fetchData();
-  });
-
-  const previousOpts = useRef<void | IOpts<T>[]>(undefined);
-
-  useEffect(() => {
-    previousOpts.current = [opts];
   });
 
   return [busy, response, error, fetchData];
