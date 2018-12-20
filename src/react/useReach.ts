@@ -45,11 +45,11 @@ export function useReach<T>(
   }
 
   useEffect(() => {
-    if (isEqual(previousOpts.current, opts.body) || busy) {
+    if (isEqual(previousOpts.current, opts) || busy) {
       return;
     }
 
-    previousOpts.current = opts.body;
+    previousOpts.current = opts;
     fetchData();
   });
 
