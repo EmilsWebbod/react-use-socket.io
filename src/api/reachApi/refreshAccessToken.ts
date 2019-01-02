@@ -44,6 +44,7 @@ async function refreshAccessToken(): Promise<void> {
     reachService.refreshingToken = false;
     reachService.token = response.token;
   } catch (e) {
+    reachService.logout();
     reachService.refreshingToken = false;
     throw e;
   }
