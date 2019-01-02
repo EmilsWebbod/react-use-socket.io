@@ -16,6 +16,7 @@ async function refreshAccessToken(): Promise<void> {
       auth.endpoint !== '' ? auth.endpoint : reachService.get('url');
 
     if (reachService.refreshingToken) {
+      reachService.logout();
       throw reachCreateError(
         401,
         'Innlogging har utgått. Vennligst logg inn igjen.'
@@ -23,6 +24,7 @@ async function refreshAccessToken(): Promise<void> {
     }
 
     if (!refreshToken || refreshToken === '') {
+      reachService.logout();
       throw reachCreateError(
         401,
         'Kan ikke hente ny tilgangs token. Ingen refresh token gitt'

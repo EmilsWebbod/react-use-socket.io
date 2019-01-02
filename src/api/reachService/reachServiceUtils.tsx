@@ -34,5 +34,8 @@ export const defaultReachProviderValues: ReachProviderValues = {
     <>
       {error.code} : {error.message}
     </>
-  )
+  ),
+  onLogout: () => {
+    console.warn('Logout is not handled');
+  }
 };

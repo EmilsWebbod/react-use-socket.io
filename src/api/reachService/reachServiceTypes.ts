@@ -40,6 +40,7 @@ export interface ReachProviderValues {
   EmptyState: ReachEmptyState;
   BusyState: ReachBusyState;
   ErrorState: ReachErrorState;
+  onLogout: () => void;
 }
 
 export type IAuthorization = ReachBasicAuth | ReachBearerAuth;

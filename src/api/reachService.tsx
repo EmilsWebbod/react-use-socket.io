@@ -100,6 +100,10 @@ class ReachService {
     }
   }
 
+  public logout() {
+    this.get('onLogout')();
+  }
+
   private setStorage() {
     this.token = this.getAuth('token') || '';
     if ('refreshToken' in this.get('authorization')) {

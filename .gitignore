@@ -8,5 +8,6 @@ lib/
 .cache
 .idea
 .nyc_output
+.env
 
 yarn-error.log
