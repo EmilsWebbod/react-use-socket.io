@@ -42,11 +42,13 @@ export function useReach<T>(
     }
   }
 
+  const queryId = Object.keys(opts.query || {}).join(',');
+  const bodyId = Object.keys(opts.body || {}).join(',');
   useEffect(
     () => {
       fetchData();
     },
-    [opts.query, opts.body]
+    [queryId, bodyId]
   );
 
   return [busy, response, error, fetchData];

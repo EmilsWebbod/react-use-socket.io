@@ -21,7 +21,7 @@ export function getUrl(path: string, opts: ReachOpts) {
     ...opts.query
   };
 
-  if (opts.method === 'GET' && opts.body) {
+  if (opts.method === 'GET' && (opts.body || opts.query)) {
     params = `/?${qs.stringify(queries)}`;
   }
 

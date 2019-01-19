@@ -14,7 +14,7 @@ export interface ReachHeaders {
 }
 
 export interface ReachQuery {
-  [key: string]: string;
+  [key: string]: any;
 }
 
 export interface ReachError {
