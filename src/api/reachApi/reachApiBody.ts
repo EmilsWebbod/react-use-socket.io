@@ -34,9 +34,7 @@ export function addTokenToBody(opts: ReachOpts) {
 }
 
 function parseBody(opts: ReachOpts) {
-  const contentType = opts.headers
-    ? opts.headers['Content-Type']
-    : 'application/json';
+  const contentType = opts.type ? opts.type : 'application/json';
   const body = opts.body as ReachBody;
 
   switch (contentType) {

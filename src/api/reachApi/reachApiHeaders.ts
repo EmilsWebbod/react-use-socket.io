@@ -51,14 +51,13 @@ export function getHeaders(opts: ReachOpts) {
     };
   }
 
-  if (opts.type) {
-    opts.headers = {
-      ...(opts.headers || {}),
-      'Content-Type': opts.type
-    };
+  const headers = combineHeaders(opts.headers);
+
+  if (opts.type === 'multipart/form-data') {
+    headers.delete('Content-Type');
   }
 
-  return combineHeaders(opts.headers);
+  return headers;
 }
 
 function combineHeaders(headers?: { [key: string]: string }) {

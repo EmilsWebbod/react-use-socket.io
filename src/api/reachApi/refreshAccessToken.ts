@@ -11,7 +11,7 @@ async function refreshAccessToken(): Promise<void> {
   try {
     const auth = reachService.get('authorization') as ReachBearerAuth;
     const refreshToken = auth.refreshToken;
-    const type = auth.contentType;
+    const type = 'application/x-www-form-urlencoded';
     const endpoint =
       auth.endpoint !== '' ? auth.endpoint : reachService.get('url');
 
@@ -38,6 +38,9 @@ async function refreshAccessToken(): Promise<void> {
       auth: false,
       body: { refreshToken },
       usePathAsUrl: true,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
       ...(type ? { type } : {})
     });
 
