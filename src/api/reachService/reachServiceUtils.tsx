@@ -2,9 +2,7 @@ import * as React from 'react';
 import { IAuthorization, ReachProviderValues } from './reachServiceTypes';
 
 function defaultHeaders() {
-  const headers = new Headers({});
-  headers.set('Content-Type', 'application/json');
-  return headers;
+  return new Headers({});
 }
 
 const defaultAuth: IAuthorization = {

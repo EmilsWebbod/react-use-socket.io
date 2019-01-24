@@ -53,7 +53,8 @@ export function getHeaders(opts: ReachOpts) {
 
   const headers = combineHeaders(opts.headers);
 
-  headers.delete('Content-Type');
+  console.log(opts.type);
+
   switch (opts.type) {
     case 'multipart/form-data':
       break;
@@ -69,7 +70,7 @@ export function getHeaders(opts: ReachOpts) {
 }
 
 function combineHeaders(headers?: { [key: string]: string }) {
-  const _headers = reachService.get('headers');
+  const _headers = new Headers(reachService.get('headers'));
 
   if (!headers) {
     return _headers;
@@ -79,6 +80,5 @@ function combineHeaders(headers?: { [key: string]: string }) {
     _headers.set(header, headers[header]);
   }
 
-  reachService.set('headers', _headers);
-  return reachService.get('headers');
+  return _headers;
 }

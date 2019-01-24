@@ -7,7 +7,7 @@ export function getBody(opts: ReachOpts): FormData | string | undefined {
     return undefined;
   }
 
-  opts.body = opts.body ? opts.body : {};
+  opts.body = opts.body ? { ...opts.body } : {};
 
   if (opts.auth && opts.tokenInBody) {
     try {
@@ -35,7 +35,7 @@ export function addTokenToBody(opts: ReachOpts) {
 
 function parseBody(opts: ReachOpts) {
   const contentType = opts.type ? opts.type : 'application/json';
-  const body = opts.body as ReachBody;
+  const body = { ...opts.body } as ReachBody;
 
   switch (contentType) {
     case 'multipart/form-data':
@@ -47,12 +47,25 @@ function parseBody(opts: ReachOpts) {
   }
 }
 
-function createMultipartForm(body: ReachBody, fileKeys = ['files']): FormData {
+function createMultipartForm(
+  body: ReachBody,
+  fileKeys = ['file', 'files']
+): FormData {
   const formData = new FormData();
 
   for (const k in body) {
-    if (fileKeys.some(fk => fk === k) && Array.isArray(body[k])) {
-      body[k].map((file: any) => formData.append(k, file));
+    if (fileKeys.some(fk => fk === k)) {
+      if (Array.isArray(body[k])) {
+        body[k].map((file: any) => formData.append(k, file));
+      } else {
+        formData.append(k, body[k]);
+      }
+    } else if (typeof body[k] === 'object' && !Array.isArray(body[k])) {
+      for (const bk in body[k]) {
+        if (body[k] && body[k].hasOwnProperty(bk)) {
+          formData.append(`${k}.${bk}`, body[k][bk]);
+        }
+      }
     } else {
       formData.append(k, body[k]);
     }
