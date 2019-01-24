@@ -34,10 +34,7 @@ async function refreshAccessToken(): Promise<void> {
       auth: false,
       body: { refreshToken },
       usePathAsUrl: true,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      ...(type ? { type } : {})
+      type
     });
 
     reachService.refreshingToken = false;

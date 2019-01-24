@@ -53,8 +53,16 @@ export function getHeaders(opts: ReachOpts) {
 
   const headers = combineHeaders(opts.headers);
 
-  if (opts.type === 'multipart/form-data') {
-    headers.delete('Content-Type');
+  headers.delete('Content-Type');
+  switch (opts.type) {
+    case 'multipart/form-data':
+      break;
+    case 'application/x-www-form-urlencoded':
+      headers.append('Content-Type', opts.type);
+      break;
+    default:
+      headers.append('Content-Type', 'application/json');
+      break;
   }
 
   return headers;
