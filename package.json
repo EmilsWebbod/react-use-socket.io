@@ -44,27 +44,27 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
-    "@storybook/react": "^4.2.0-alpha.6",
+    "@storybook/react": "^4.1.11",
     "@types/chai": "^4.1.7",
     "@types/lodash.isequal": "^4.5.3",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.3",
     "@types/qs": "^6.5.1",
-    "@types/react": "^16.7.17",
-    "@types/storybook__react": "^4.0.0",
+    "@types/react": "^16.8.3",
+    "@types/storybook__react": "^4.0.1",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.4",
     "chai": "^4.2.0",
     "husky": "^1.2.0",
     "mocha": "^5.2.0",
     "prettier": "^1.15.2",
-    "pretty-quick": "^1.8.0",
-    "react": "^16.7.0-alpha.2",
-    "react-dom": "^16.7.0-alpha.2",
+    "pretty-quick": "^1.10.0",
+    "react": "^16.8.2",
+    "react-dom": "^16.8.2",
     "source-map-support": "^0.5.9",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
-    "typescript": "^3.1.6",
+    "typescript": "^3.3.3",
     "typings": "^2.1.1"
   },
   "dependencies": {
@@ -73,7 +73,10 @@
     "qs": "^6.5.2"
   },
   "peerDependencies": {
-    "react": "^16.7.0-alpha.2",
-    "react-dom": "^16.7.0-alpha.2"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "resolutions": {
+    "@types/react": "^16.8.3"
   }
 }

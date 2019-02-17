@@ -42,7 +42,7 @@ export type ReachCrudMethods = 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export type ReachCrudEdit<T> = Partial<ReachEdit<T>>;
 
 export function useCrud<T extends Object>(props: Props<T>) {
-  const { url, id = '_id', data = {}, edit = {}, ...functions } = props;
+  const { url, id = '_id', data = {} as T, edit = {}, ...functions } = props;
 
   const init = useRef(false);
   const [state, setState] = useState<State<T>>({
