@@ -53,8 +53,6 @@ export function getHeaders(opts: ReachOpts) {
 
   const headers = combineHeaders(opts.headers);
 
-  console.log(opts.type);
-
   switch (opts.type) {
     case 'multipart/form-data':
       break;

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { reachApi } from '../api/reachApi';
-import { ReachError, ReachOpts } from '../interface/api';
-import useSafeState from '../utils/useSafeState';
+import { reachApi } from '../api';
+import { ReachError, ReachOpts } from '../interface';
+import { useReducerState } from './useReducerState';
 
 interface IOpts<T> extends ReachOpts {
   endpoint: string;
@@ -9,32 +9,38 @@ interface IOpts<T> extends ReachOpts {
   onError?: (error: ReachError) => void;
 }
 
-export function useReach<T>(
+interface State<T> {
+  busy: boolean;
+  response: T | null;
+  error: ReachError | null;
+}
+
+export function useReach<T extends object>(
   opts: IOpts<T>
 ): [boolean, T | null, ReachError | null, () => Promise<void>] {
-  const [busy, setBusy] = useSafeState<boolean>(false);
-  const [response, setResponse] = useSafeState<T | null>(null);
-  const [error, setError] = useSafeState<ReachError | null>(null);
+  const [state, setState] = useReducerState<State<T>>({
+    busy: false,
+    response: null,
+    error: null
+  });
 
   async function fetchData() {
-    if (busy) {
+    if (state.busy) {
       return;
     }
 
     try {
-      setBusy(true);
+      setState({ busy: true });
 
-      const res = await reachApi<T>(opts.endpoint, opts);
+      const response = await reachApi<T>(opts.endpoint, opts);
 
-      setBusy(false);
-      setResponse(res);
+      setState({ busy: false, response });
 
       if (typeof opts.onSuccess === 'function') {
-        opts.onSuccess(res);
+        opts.onSuccess(response);
       }
     } catch (error) {
-      setBusy(false);
-      setError(error);
+      setState({ busy: false, error });
 
       if (typeof opts.onError === 'function') {
         opts.onError(error);
@@ -46,10 +52,10 @@ export function useReach<T>(
   const bodyId = Object.keys(opts.body || {}).join(',');
   useEffect(
     () => {
-      fetchData();
+      fetchData().then();
     },
-    [queryId, bodyId]
+    [opts.endpoint, queryId, bodyId]
   );
 
-  return [busy, response, error, fetchData];
+  return [state.busy, state.response, state.error, fetchData];
 }
